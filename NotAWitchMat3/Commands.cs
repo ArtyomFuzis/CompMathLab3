@@ -8,8 +8,23 @@ namespace NotAWitchMat3
 {
     internal static class Commands
     {
+        private static Dictionary<int, String> command_bind = new Dictionary<int, string>
+        {
+            {0, "help" },
+            {1, "calc_int" },
+            {2, "calc_impop" }
+        };
         public static void process_command(string command)
         {
+            if (int.TryParse(command, out var result)) 
+            {
+                if (!command_bind.ContainsKey(result))
+                {
+                    Console.WriteLine("alias команды не найден, попробуйте help (0)");
+                    return;
+                }
+                else command = command_bind[result];
+            }
             MethodInfo? cmd = Type.GetType("NotAWitchMat3.Commands")?.GetMethod($"cmd_{command}");
             if (cmd == null)
             {
@@ -26,9 +41,9 @@ namespace NotAWitchMat3
 
                 Доступные команды:
                 -----------------------
-                calc_int - вычислить интеграл (с выбором метода и функции) 
-                calc_impop - вычислить несобственный интеграл (с выбором метода и функции)
-                help - вывести данную информацию
+                (1): calc_int - вычислить интеграл (с выбором метода и функции) 
+                (2): calc_impop - вычислить несобственный интеграл (с выбором метода и функции)
+                (0): help - вывести данную информацию
                 -----------------------
 
                 """);
